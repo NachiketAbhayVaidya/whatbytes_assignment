@@ -1,0 +1,54 @@
+{
+  "project_info": {
+    "project_number": "286041211891",
+    "project_id": "gigtasks-nachiket-26",
+    "storage_bucket": "gigtasks-nachiket-26.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:286041211891:android:1bbc4db25d080dfb6ec886",
+        "android_client_info": {
+          "package_name": "com.example.whatbytesassignment"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "286041211891-4bfiisf00uhhe6et6nk575nn5ie57vlq.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.whatbytesassignment",
+            "certificate_hash": "2dad8e19f5c82f0697cf3eff6390f09a401beff7"
+          }
+        },
+        {
+          "client_id": "286041211891-2p2fn59u1v3kva0c9gaorjc5tg6ab2rj.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBHhkqALpKkms8hy_lNdvuxNNHYSef9LeI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "286041211891-2p2fn59u1v3kva0c9gaorjc5tg6ab2rj.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "286041211891-8li6ro91tpdkdsr80tbca62qe3g4a7co.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.whatbytesassignment"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
