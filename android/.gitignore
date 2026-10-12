@@ -12,3 +12,7 @@ GeneratedPluginRegistrant.java
 key.properties
 **/*.keystore
 **/*.jks
+
+# Exception: a debug-only key (public password "android") shared by this project so Google
+# sign-in works on every machine. NEVER reuse it for a release/Play Store build.
+!app/shared-debug.keystore

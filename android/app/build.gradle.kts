@@ -30,6 +30,18 @@ android {
         versionName = flutter.versionName
     }
 
+    signingConfigs {
+        // Debug builds on every machine use this shared, debug-only key (public password "android"),
+        // so the one fingerprint registered in Firebase makes Google sign-in work for everyone.
+        // Never use it for a release / Play Store build.
+        getByName("debug") {
+            storeFile = file("shared-debug.keystore")
+            storePassword = "android"
+            keyAlias = "androiddebugkey"
+            keyPassword = "android"
+        }
+    }
+
     buildTypes {
         release {
             // TODO: Add your own signing config for the release build.

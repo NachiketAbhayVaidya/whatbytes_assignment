@@ -110,7 +110,7 @@ Google is just another Firebase Auth *provider*, so it goes through Firebase lik
 2. Google returns an **ID token**. We hand it to Firebase with `signInWithCredential(GoogleAuthProvider.credential(idToken: ...))`.
 3. Firebase creates or finds the user and the normal `userChanges` stream moves the app on. The user has an ordinary Firebase `uid`, so tasks, security rules and reminders work exactly as for email users.
 - **Web** uses Firebase's `signInWithPopup` instead (different mechanism, same result).
-- **Setup needed:** the Google provider enabled in the Firebase console, plus the app's **SHA-1/SHA-256 signing fingerprints** registered in Firebase (that creates the Android OAuth client inside `google-services.json`). Without a registered fingerprint, Google sign-in fails with an `ApiException 10`-style error; the app catches this and shows "Google sign-in isn't set up for this build. Please use email and password instead." Closing the account picker is not treated as an error.
+- **Setup needed:** the Google provider enabled in the Firebase console, plus the app's **SHA-1/SHA-256 signing fingerprints** registered in Firebase (that creates the Android OAuth client inside `google-services.json`). Google only accepts sign-in from an app signed with a registered key. Every machine normally generates its own random debug key, which would not be registered, so the project ships one shared **debug-only** keystore (`android/app/shared-debug.keystore`, configured for the `debug` signing config in `android/app/build.gradle.kts`) whose fingerprint is registered. All debug builds therefore have the same fingerprint and Google sign-in works for anyone who runs the project. If a build is signed with some other key, sign-in fails; the app catches this and shows "Google sign-in isn't set up for this build. Please use email and password instead." Closing the account picker is not treated as an error.
 - **Usernames for Google users:** a Google account has no `@username`, so `ProfileGate` (in `profile_gate.dart`) watches the user's `users/{uid}` profile document:
   - profile exists -> Home screen;
   - profile confirmed missing by the server -> **Choose your username** screen (prefilled from the email, same live availability check and same unique-name claim as sign-up);
@@ -396,8 +396,11 @@ It would need a public username-to-email lookup, which leaks users' emails. Emai
 **What happens if two people pick the same name at once?**
 The first batch wins. The second batch is rejected by the rules, the second account is deleted, and that user sees "That username is already taken".
 
-**How does Google sign-in work, and why might it fail for someone else?**
-It's a Firebase Auth provider: Google gives us an ID token and Firebase turns it into a user. On Android it only works for builds whose signing-key fingerprint is registered in Firebase. My debug key is registered; another machine's debug key isn't, so Google login can fail there (the app shows a friendly message and email/password still works). Registering the other key, or a release key, fixes it.
+**How does Google sign-in work, and why does it work on other people's machines?**
+It's a Firebase Auth provider: Google gives us an ID token and Firebase turns it into a user. On Android Google only accepts apps signed with a key whose fingerprint is registered in Firebase. Normally each developer's debug key differs, so it would fail for anyone else. To avoid that, the repo includes one shared debug-only keystore whose fingerprint is registered, so every debug build is accepted. It's only for debug builds (public password), and a real release would use its own private key, registered separately.
+
+**Is committing a keystore safe?**
+Only because it's a throwaway debug key. Never commit a release keystore; Flutter's `.gitignore` blocks keystores by default and I added a single exception for this one file.
 
 **Why were notifications late at first?**
 They were scheduled as inexact alarms, which Android may deliver anywhere inside a window (I measured 68 s late on a real phone). Switching to exact alarms brought it to 31 ms.

@@ -82,13 +82,12 @@ The Firebase configuration (`lib/firebase_options.dart` and `android/app/google-
 3. Deploy the security rules: `firebase deploy --only firestore:rules --project <your-project-id>`.
 4. For Google sign-in on Android, add your signing fingerprints in the Firebase console (see below) and download a fresh `google-services.json`.
 
-### Google sign-in on Android: please read
-Google sign-in only works for builds whose signing-key fingerprint is registered in Firebase. The author's debug key is registered; **your machine's debug key will not be**, so on your own build the Google button will probably show *"Google sign-in isn't set up for this build."* **Email and password work everywhere.** To enable Google sign-in on your build:
-
-```bash
-keytool -list -v -alias androiddebugkey -keystore ~/.android/debug.keystore -storepass android -keypass android
-```
-Add the SHA-1 and SHA-256 under *Firebase console, Project settings, your Android app*, then re-download `google-services.json`.
+### Google sign-in
+- **Android:** works out of the box. The project ships a shared **debug-only** signing key (`android/app/shared-debug.keystore`) whose fingerprint is registered in Firebase, so any debug build (`flutter run`, `flutter build apk --debug`) can use Google sign-in on any machine. The phone or emulator needs Google Play services (use a "Google Play" emulator image).
+- **Web:** works on `localhost`.
+- **Your own signing key:** if you sign with a different key (for example a release key), add its SHA-1 and SHA-256 under *Firebase console, Project settings, your Android app*, then download a fresh `google-services.json`.
+- That keystore is for debug builds only (its password is the public default, `android`). Never use it to publish an app.
+- If Google sign-in is ever unavailable, the app shows a friendly message and **email and password always work**.
 
 ---
 
@@ -134,7 +133,7 @@ flutter test
 - **Tested:** an Android phone (Android 15) and Chrome.
 - **iOS:** the code is cross-platform and the iOS app is registered in Firebase, but I develop on Windows and **could not build or run it** (that needs a Mac with Xcode). Google sign-in is not configured for iOS.
 - **Notifications** are local, so they work on Android and iOS but not on web. Tapping one opens the app but doesn't jump to the task. iOS keeps only the 64 soonest pending notifications, so the app schedules the 60 soonest.
-- **Google sign-in** on a new machine needs its signing fingerprint registered (see above).
+- **Google sign-in** is not set up for iOS (it needs a Mac, a `GoogleService-Info.plist` and a URL scheme). On Android and web it works as described above.
 - Login is by email, not by username.
 
 ## Ideas for next
