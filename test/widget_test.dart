@@ -134,7 +134,7 @@ void main() {
   group('username suggestion', () {
     test('turns an email into a valid username', () {
       expect(AuthService.suggestUsername('Sam.Lee+x@gmail.com'), 'samleex');
-      expect(AuthService.suggestUsername('nachiketvaidya811262@gmail.com'), 'nachiketvaidya811262');
+      expect(AuthService.suggestUsername('jordan.rivera2026@example.com'), 'jordanrivera2026');
     });
     test('always returns something that passes validation', () {
       for (final e in [null, '', 'a@x.com', '..@x.com', 'ab@x.com', 'a_very_long_name_that_exceeds_twenty@x.com']) {
